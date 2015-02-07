@@ -1,1 +1,1 @@
-for scientific-software-diary.com
+Code described on scientific-software-diary.com
