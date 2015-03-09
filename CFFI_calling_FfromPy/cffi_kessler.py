@@ -5,6 +5,8 @@ from cffi import FFI
 ffi = FFI()
 
 def as_pointer(numpy_array):
+    assert numpy_array.flags['F_CONTIGUOUS'], \
+        "array is not contiguous in memory (Fortran order)"
     return ffi.cast("double*", numpy_array.__array_interface__['data'][0])
 
 
@@ -18,22 +20,19 @@ def kessler(nx, ny, nz, dt_in, variable_nparr):
 
     # create cdata variables of a type "double *" for each numpy array 
     # the cdata variables will be passed to the C function and can be changed 
-    variable_Farr = {}
+    variable_CFFI = {}
     for item in ["t", "qv", "qc", "qr", "rho", "pii", "z", "dz8w", "RAINNC", "RAINNCV"]:
-        variable_Farr[item] = as_pointer(variable_nparr[item]) 
+        variable_CFFI[item] = as_pointer(variable_nparr[item]) 
 
     # create additional variables that will be passed to the C function as values
     [ims, ime, ids, ide, its, ite] = [1, nx] * 3
     [jms, jme, jds, jde, jts, jte] = [1, ny] * 3
     [kms, kme, kds, kde, kts, kte] = [1, nz] * 3
 
-    #import pdb
-    #pdb.set_trace()
-
     # call the C function 
-    lib.c_kessler(variable_Farr["t"], variable_Farr["qv"], variable_Farr["qc"], 
-                  variable_Farr["qr"], variable_Farr["rho"], variable_Farr["pii"], 
-                  dt_in, variable_Farr["z"], xlv, cp, EP2, SVP1, SVP2, SVP3, SVPT0, 
-                  rhowater, variable_Farr["dz8w"], variable_Farr["RAINNC"], 
-                  variable_Farr["RAINNCV"], ids, ide, jds, jde, kds, kde, 
+    lib.c_kessler(variable_CFFI["t"], variable_CFFI["qv"], variable_CFFI["qc"], 
+                  variable_CFFI["qr"], variable_CFFI["rho"], variable_CFFI["pii"], 
+                  dt_in, variable_CFFI["z"], xlv, cp, EP2, SVP1, SVP2, SVP3, SVPT0, 
+                  rhowater, variable_CFFI["dz8w"], variable_CFFI["RAINNC"], 
+                  variable_CFFI["RAINNCV"], ids, ide, jds, jde, kds, kde, 
                   ims, ime, jms, jme, kms, kme, its, ite, jts, jte, kts, kte)
