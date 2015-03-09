@@ -94,7 +94,7 @@ CONTAINS
 ! outer J loop for entire microphysics, outer i loop for sedimentation
 !-----------------------------------------------------------------------------
 
-     print*, "w fortranie RAINNC(0,3)", RAINNC(1,4)
+     print*, "w fortranie RAINNC(1,3)", RAINNC(2,4)
 
   microphysics_outer_j_loop: DO j = jts, jte
 
@@ -201,7 +201,7 @@ CONTAINS
 ! Production of qc from supersaturation
 ! Evaporation of QR
 !------------------------------------------------------------------------------
-      print*, "w 1 fortranie qv(2,2,1)", qv(2,2,1)
+      print*, "w 1 fortranie qv(1,1,0), qv(0,2,3)", qv(2,2,1), qv(1,3,4)
 
      DO k = kts, kte
      DO i = its, ite
@@ -239,6 +239,8 @@ CONTAINS
      ENDDO
 
   ENDDO  microphysics_outer_j_loop
+
+      print*, "w 2 fortranie qv(1,1,0), qv(0,2,3)", qv(2,2,1), qv(1,3,4)
 
   RETURN
 
