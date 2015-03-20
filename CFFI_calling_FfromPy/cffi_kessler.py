@@ -4,6 +4,8 @@ from constants_kessler import xlv, cp, EP2, SVP1, SVP2, SVP3, SVPT0, rhowater
 from cffi import FFI
 ffi = FFI()
 
+# function creates cdata variables of a type "double *" from a numpy array
+# additionally checks if the array is contiguous   
 def as_pointer(numpy_array):
     assert numpy_array.flags['F_CONTIGUOUS'], \
         "array is not contiguous in memory (Fortran order)"
@@ -18,7 +20,7 @@ def kessler(nx, ny, nz, dt_in, variable_nparr):
     # load a library with the C function
     lib = ffi.dlopen('libkessler.so')
 
-    # create cdata variables of a type "double *" for each numpy array 
+    # create cdata variables  for each numpy array 
     # the cdata variables will be passed to the C function and can be changed 
     variable_CFFI = {}
     for item in ["t", "qv", "qc", "qr", "rho", "pii", "z", "dz8w", "RAINNC", "RAINNCV"]:

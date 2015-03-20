@@ -90,11 +90,13 @@ CONTAINS
       max_condense = 0.
       max_rain = 0.
 
+      print*, "in fortran subroutine before microphysics qv(1,1,3), qv(1,3,3)"
+      print*, qv(1,1,3), qv(1,3,3)
+
 !-----------------------------------------------------------------------------
 ! outer J loop for entire microphysics, outer i loop for sedimentation
 !-----------------------------------------------------------------------------
 
-     print*, "w fortranie RAINNC(1,3)", RAINNC(2,4)
 
   microphysics_outer_j_loop: DO j = jts, jte
 
@@ -201,8 +203,7 @@ CONTAINS
 ! Production of qc from supersaturation
 ! Evaporation of QR
 !------------------------------------------------------------------------------
-      print*, "w 1 fortranie qv(1,1,0), qv(0,2,3)", qv(2,2,1), qv(1,3,4)
-
+ 
      DO k = kts, kte
      DO i = its, ite
        factorn = 1.0 / (1.+c3*dt*amax1(0.,qr(i,k,j))**c4)
@@ -240,7 +241,9 @@ CONTAINS
 
   ENDDO  microphysics_outer_j_loop
 
-      print*, "w 2 fortranie qv(1,1,0), qv(0,2,3)", qv(2,2,1), qv(1,3,4)
+  print*, "in fortran subroutine afetr microphysics qv(1,1,3), qv(1,3,3)"
+  print*, qv(1,1,3), qv(1,3,3)
+
 
   RETURN
 
